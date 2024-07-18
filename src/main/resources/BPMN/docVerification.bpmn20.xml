@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/processdef">
+  <process id="docVerification" name="docVerification" isExecutable="true">
+    <startEvent id="startProcess" name="start_doc_verify">
+      <documentation>start document verification process</documentation>
+    </startEvent>
+    <serviceTask id="sid-801bff14-2774-4895-ac2d-f2baf5ce0d21" activiti:exclusive="true" name="Document Received"
+                 activiti:class="com.khired.documentapprovalworkflow.ActivitiDelegate.DocumentReceivedTaskDelegate">
+      <documentation>Document Received Send Notification to Managers</documentation>
+    </serviceTask>
+    <userTask id="sid-ce8e28c4-a961-479c-a335-d9737d3c556c" name="Verify Document">
+      <documentation>Employee will verify the document</documentation>
+      <extensionElements>
+        <activiti:inputOutput>
+          <activiti:inputParameter name="companyId" />
+          <activiti:inputParameter name="apiUrl" />
+          <activiti:inputParameter name="docToken" />
+          <activiti:inputParameter name="docApprovalResult" />
+        </activiti:inputOutput>
+      </extensionElements>
+    </userTask>
+
+    <serviceTask id="sid-d34c202e-4554-4149-804d-4a1d6ff9d9bb"
+                 activiti:exclusive="true"
+                 name="Verification Completed"
+                 activiti:class="com.khired.documentapprovalworkflow.ActivitiDelegate.ApprovedDocumentTaskDelegate">
+      <documentation>Send Email for document verification completed</documentation>
+      <extensionElements>
+        <activiti:inputOutput>
+          <activiti:inputParameter name="companyId" />
+          <activiti:inputParameter name="apiUrl" />
+          <activiti:inputParameter name="docToken" />
+          <activiti:inputParameter name="docApprovalResult" />
+
+        </activiti:inputOutput>
+      </extensionElements>
+    </serviceTask>
+    <endEvent id="sid-a97f0db3-f76b-467a-b233-bc7e9605acb8" name="Process ends">
+      <documentation>Verification Process Ends here</documentation>
+    </endEvent>
+    <sequenceFlow id="sid-c2d67aaf-c902-40f6-89db-309ed0d046de" sourceRef="startProcess" targetRef="sid-801bff14-2774-4895-ac2d-f2baf5ce0d21" name="send document"/>
+    <sequenceFlow id="sid-0a33f8c4-d4e7-44df-9272-98d0e433754f" sourceRef="sid-801bff14-2774-4895-ac2d-f2baf5ce0d21" targetRef="sid-ce8e28c4-a961-479c-a335-d9737d3c556c" name="Send for verfiy"/>
+    <sequenceFlow id="sid-af22debc-6f8b-45ea-be9a-22a5b20784d2" sourceRef="sid-ce8e28c4-a961-479c-a335-d9737d3c556c" targetRef="sid-d34c202e-4554-4149-804d-4a1d6ff9d9bb" name="Send Results"/>
+    <sequenceFlow id="sid-91fd7400-ffee-4fe1-a173-c0c358b8b563" sourceRef="sid-d34c202e-4554-4149-804d-4a1d6ff9d9bb" targetRef="sid-a97f0db3-f76b-467a-b233-bc7e9605acb8"/>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_docVerification">
+    <bpmndi:BPMNPlane bpmnElement="docVerification" id="BPMNPlane_docVerification">
+      <bpmndi:BPMNShape id="shape-814a7ba5-def0-4748-bd64-330de2b23a7f" bpmnElement="startProcess">
+        <omgdc:Bounds x="-365.0" y="-15.0" width="30.0" height="30.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape-7fd7b741-a5a4-4e57-b73b-ad949881cbec" bpmnElement="sid-801bff14-2774-4895-ac2d-f2baf5ce0d21">
+        <omgdc:Bounds x="-235.0" y="-40.0" width="100.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape-343c7ad8-2a6d-47ee-86bb-7707806a6eee" bpmnElement="sid-ce8e28c4-a961-479c-a335-d9737d3c556c">
+        <omgdc:Bounds x="-25.0" y="-40.0" width="100.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape-4be75be2-f252-4d56-9769-c6e0c7a37205" bpmnElement="sid-d34c202e-4554-4149-804d-4a1d6ff9d9bb">
+        <omgdc:Bounds x="165.0" y="-40.0" width="100.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape-f7a10e31-9cb5-4a4f-989b-f17567fe60c1" bpmnElement="sid-a97f0db3-f76b-467a-b233-bc7e9605acb8">
+        <omgdc:Bounds x="350.0" y="-15.0" width="30.0" height="30.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="edge-82f2a740-ab1a-493e-b392-ba4cdb11d1da" bpmnElement="sid-c2d67aaf-c902-40f6-89db-309ed0d046de">
+        <omgdi:waypoint x="-335.0" y="0.0"/>
+        <omgdi:waypoint x="-235.0" y="0.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge-68de2cf2-634b-4657-90af-5ef2d5644e95" bpmnElement="sid-0a33f8c4-d4e7-44df-9272-98d0e433754f">
+        <omgdi:waypoint x="-135.0" y="0.0"/>
+        <omgdi:waypoint x="-25.0" y="0.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge-93094383-2aac-4f17-8288-dce812f9e541" bpmnElement="sid-af22debc-6f8b-45ea-be9a-22a5b20784d2">
+        <omgdi:waypoint x="75.0" y="0.0"/>
+        <omgdi:waypoint x="165.0" y="0.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge-af5c4605-4658-47fd-90e2-071711ce7412" bpmnElement="sid-91fd7400-ffee-4fe1-a173-c0c358b8b563">
+        <omgdi:waypoint x="265.0" y="0.0"/>
+        <omgdi:waypoint x="350.0" y="0.0"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
